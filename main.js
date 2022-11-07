@@ -4,9 +4,15 @@ const btnUp = document.querySelector('#up');
 const btnLeft = document.querySelector('#left');
 const btnRight = document.querySelector('#right');
 const btnDown = document.querySelector('#down');
+const spanLifes = document.querySelector('#spanLifes');
+const spanTime = document.querySelector('#spanTime');
 
 let canvasSize;
 let elementsSize;
+
+let timeStart;
+let timeInterval;
+
 
 const playerPosition = {
   x: undefined,
@@ -18,7 +24,7 @@ const giftPosition = {
 };
 let enemyPositions = [];
 let level = 0;
-let lives = 3;
+let lifes = 3;
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -49,6 +55,11 @@ function startGame() {
   if (!map){
     gameWin();
     return;
+  }
+
+  if (!timeStart){
+    timeStart = Date.now();
+    timeInterval = setInterval(showTime, 100)
   }
 
   const mapRows = map.trim().split('\n');
@@ -83,7 +94,7 @@ function startGame() {
       game.fillText(emoji, posX, posY);
     });
   });
-
+  showLifes();
   movePlayer();
 }
 
@@ -118,13 +129,14 @@ btnRight.addEventListener('click', moveRight);
 btnDown.addEventListener('click', moveDown);
 
 function restartLevel() {
-  lives--;
+  lifes--;
   
-  if (lives > 0) {
+  if (lifes > 0) {
 
   } else {
     level = 0;
-    lives = 3;
+    lifes = 3;
+    timeStart = undefined;
   }
 
   playerPosition.x = undefined;
@@ -139,6 +151,7 @@ function levelWin () {
 
 function gameWin () {
   console.log ('Ganaste el juego perri');
+  clearInterval(timeInterval);
 }
 
 function moveByKeys(event) {
@@ -150,7 +163,7 @@ function moveByKeys(event) {
 function moveUp() {
   console.log('Me quiero mover hacia arriba');
 
-  if ((playerPosition.y - elementsSize) < elementsSize) {
+  if ((playerPosition.y - elementsSize) <= elementsSize) {
     console.log('OUT');
   } else {
     playerPosition.y -= elementsSize;
@@ -186,4 +199,11 @@ function moveDown() {
     playerPosition.y += elementsSize;
     startGame();
   }
+}
+function showLifes() {
+  spanLifes.innerHTML = emojis["HEART"].repeat(lifes);
+}
+
+function showTime() {
+  spanTime.innerHTML = Date.now() - timeStart;
 }
