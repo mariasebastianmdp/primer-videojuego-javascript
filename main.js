@@ -6,6 +6,8 @@ const btnRight = document.querySelector('#right');
 const btnDown = document.querySelector('#down');
 const spanLifes = document.querySelector('#spanLifes');
 const spanTime = document.querySelector('#spanTime');
+const spanRecord = document.querySelector('#spanRecord');
+const result = document.querySelector('#result');
 
 let canvasSize;
 let elementsSize;
@@ -31,15 +33,19 @@ window.addEventListener('resize', setCanvasSize);
 
 function setCanvasSize() {
   if (window.innerHeight > window.innerWidth) {
-    canvasSize = window.innerWidth * 0.8;
+    canvasSize = window.innerWidth * 0.7;
   } else {
-    canvasSize = window.innerHeight * 0.8;
+    canvasSize = window.innerHeight * 0.7;
   }
+
+  canvasSize = Number(canvasSize.toFixed(0));
   
   canvas.setAttribute('width', canvasSize);
   canvas.setAttribute('height', canvasSize);
   
   elementsSize = canvasSize / 10;
+  playerPosition.x= undefined;
+  playerPosition.y= undefined;
 
   startGame();
 }
@@ -59,8 +65,12 @@ function startGame() {
 
   if (!timeStart){
     timeStart = Date.now();
-    timeInterval = setInterval(showTime, 100)
+    timeInterval = setInterval(showTime, 100);
+    showRecord();
+    result.innerHTML = 'Establece tu primer record.'
   }
+
+
 
   const mapRows = map.trim().split('\n');
   const mapRowCols = mapRows.map(row => row.trim().split(''));
@@ -149,9 +159,26 @@ function levelWin () {
   startGame();
 }
 
-function gameWin () {
-  console.log ('Ganaste el juego perri');
+function gameWin() {
+  console.log('¡Terminaste el juego!');
   clearInterval(timeInterval);
+
+  const recordTime = localStorage.getItem('record_time');
+  const playerTime = Date.now() - timeStart;
+
+  if (recordTime) {
+    if (recordTime >= playerTime) {
+      localStorage.setItem('record_time', playerTime);
+      result.innerHTML = 'SUPERASTE EL RECORD :)';
+    } else {
+      result.innerHTML = 'lo siento, no superaste el records :(';
+    }
+  } else {
+    localStorage.setItem('record_time', playerTime);
+    result.innerHTML = 'Primera vez? Muy bien, pero ahora trata de superar tu tiempo :)';
+  }
+
+  console.log({recordTime, playerTime});
 }
 
 function moveByKeys(event) {
@@ -206,4 +233,7 @@ function showLifes() {
 
 function showTime() {
   spanTime.innerHTML = Date.now() - timeStart;
+}
+function showRecord(){
+  spanRecord.innerHTML = localStorage.getItem('record_time');
 }
