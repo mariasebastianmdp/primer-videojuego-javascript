@@ -4,28 +4,62 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./styles.css">
-    <title>Primer Juego | Online</title>
+    <title>Platzriv - Jueguito online de carreras y calaveras</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/d9eacc821b.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="game-container">
-        <canvas id="game"></canvas>
-
-        <div class="buttons-container">
-            <button id="up">Arriba</button>
-            <button id="left">Izquierda</button>
-            <button id="right">Derecha</button>
-            <button id="down">Abajo</button>
+    <div class="game-container display-none">
+        <div class="messages">
+            <div>
+                <span id="lives"></span>
+            </div>
+            <div>
+                 <span>⏰</span><span id="time"></span>
+            </div>
+            <div>
+                <span>Record: </span><span id="record"></span>
+            </div>
         </div>
-
-        <div class="info">
-            <p>Vidas restantes: <span id="spanLifes"></span></p>
-            <p>Tiempo de juego: <span id="spanTime"></span></p>
-            <p>Record: <span id="spanRecord"></span></p>
-            <p id="result">Result </p>
+        <canvas id="game"></canvas>
+        <div class="btns">
+            <button id="up" onclick= "move('ArrowUp')"><i class="fa-solid fa-arrow-up"></i></button>
+            <button id="left" onclick="move('ArrowLeft')"><i class="fa-solid fa-arrow-left"></i></button>
+            <button id="right" onclick="move('ArrowRight')"><i class="fa-solid fa-arrow-right"></i></button>
+            <button id="down" onclick="move('ArrowDown')"><i class="fa-solid fa-arrow-down"></i></button>
         </div>
     </div>
+    <div class="lobby">
+        <h1>Se el mas rápido en resolver los laberintos.</h1>
+        <button class="button-start" onclick="startGame()">Empezar Juego!</button>
+        <h2>Records</h2>
+        <div class="table-grid">
+            <div>Posición</div>
+            <div>Nombre</div>
+            <div>Pais</div>
+            <div>Tiempo</div>
+        </div>
+    </div>
+    <div class="loser display-none">
+        <h2>¡Perdiste!</h2>
+        <p>😫</p>
+        <button onclick="reload()">Volver a intentar</button>
+    </div>
+
+    <div class="win display-none">
+        <h1>Felicidades Ganaste</h1>
+        <p>🏆</p>
+        <h2>Subir tu record</h2>
+        <label>Nombre:
+            <input type="text" id="name">
+        </label>
+        <label>País:
+            <input type="text" id="country">
+        </label>
+        <p id="resultGame"></p>
+        <button id="buttonTime" onclick="postTime()">Subir Tiempo</button>
+    </div>
     <script src="./maps.js"></script>
-    <script src="./main.js"></script>
+    <script src="./game.js"></script>
 </body>
 </html>
